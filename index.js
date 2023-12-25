@@ -52,12 +52,10 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 })
-
 const upload = multer({ storage: storage })
 
 app.post("/api/books", upload.single("thumbnail"), async (req, res) => {
   try {
-
     const newBook = new Book({
       title: req.body.title,
       slug: req.body.slug,
@@ -66,10 +64,10 @@ app.post("/api/books", upload.single("thumbnail"), async (req, res) => {
       category: req.body.category.split(","),
       thumbnail: req.file.filename,
     })
-
     await Book.create(newBook);
-    res.json("Data Submitted");
+    res.status(200).json("Data Submitted");
   } catch (error) {
+    console.log(error.message)
     res.status(500).json({ error: "An error occurred while fetching books." });
   }
 });
